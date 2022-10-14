@@ -17,7 +17,22 @@ A 3Gb cache of prices is created in the PricingService
 
 Price for Flight and Date is return by the PriceService, fetch a vaue from the cache
 
-### From the log file: ###
+Too configure the total amount to data created, the following JSON configuration can be amended
+
+**resources/server-conif.json**
+
+'"mock": {
+		"years": 1,
+		"buffer-size": 1024
+	},
+
+**Formula**
+
+CacheSize = 500 * years * buffer-size
+
+**e.g.**
+
+1 year * 1024 * 500 = ~186.88 MB
 
 ## Tech Stack
 
