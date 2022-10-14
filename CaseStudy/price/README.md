@@ -3,7 +3,7 @@
 ## Tech Choices
 
 [Vertx][1] is a mature **Async / Reactive library** with bindings for Java, Kotlin and Groovy
-and consistently outperforming othet similar libraries in the [TechEmpower Web Framework Benchmarks][2]
+while consistently outperforming other similar libraries in the [TechEmpower Web Framework Benchmarks][2]
 
 It is currently ranked **11th** in a list of **142** frameworks (Spring WebFlux is currently ranked **67th**).
 
@@ -15,7 +15,7 @@ On startup a cache of 3GB of mocked price data is warmed.
 
 A 3Gb cache of prices is created in the PricingService
 
-Price for Flight and Date is return by the PriceService, fetch a vaue from the cache
+Price for Flight and Date is returned by the PriceService, by fetching a value from the cache
 
 Too configure the total amount to data created, the following JSON configuration can be amended
 

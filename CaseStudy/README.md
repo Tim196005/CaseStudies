@@ -3,7 +3,7 @@
 ## Tech Choices
 
 [Vertx][1] is a mature **Async / Reactive library** with bindings for Java, Kotlin and Groovy
-and consistently outperforming othet similar libraries in the [TechEmpower Web Framework Benchmarks][2]
+while consistently outperforming other similar libraries in the [TechEmpower Web Framework Benchmarks][2]
 
 It is currently ranked **11th** in a list of **142** frameworks (Spring WebFlux is currently ranked **67th**).
 
