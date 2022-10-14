@@ -1,0 +1,93 @@
+{
+	"serverOptions": {
+		"port": 8069,
+		"logActivity": true,
+		"contextPath": "pricecasestudy",
+		"requestTimeout": 20000
+	},
+	"httpClientOptions": {
+		"maxlineLength": 16384,
+		"connectTimeout": 10000,
+		"logActivity": true,
+		"keepAliveSeconds": 10,
+		"keepAliveFlag": true,
+		"maxPoolSize": 16,
+		"sslHandshakeTimeoutSeconds": 10,
+		"requestTimeout": 8000
+	},
+	"configRetrieverOptions": {
+		"scanPeriod": 5000
+	},
+	"vertxOptions": {
+		"internalBlockingPoolSize": 24,
+		"maxEventLoopExecuteTime": 2,
+		"maxEventLoopExecuteTimeUnit": "SECONDS",
+		"maxWorkerExecuteTime": 5,
+		"maxWorkerExecuteTimeUnit": "SECONDS",
+		"blockedThreadCheckInterval": 1,
+		"blockedThreadCheckIntervalUnit": "SECONDS",
+		"eventLoopPoolSize": 32,
+		"preferNativeTransport": false,
+		"quorumSize": 1,
+		"warningExceptionTime": 5,
+		"warningExceptionTimeUnit": "SECONDS",
+		"workerPoolSize": 16
+	},
+	"eventBusOptions": {
+		"acceptBacklog": -1,
+		"clientAuth": "NONE",
+		"connectTimeout": 60000,
+		"crlPaths": [],
+		"crlValues": [],
+		"enabledCipherSuites": [],
+		"enabledSecureTransportProtocols": [
+			"TLSv1",
+			"TLSv1.1",
+			"TLSv1.2"
+		],
+		"idleTimeout": 0,
+		"idleTimeoutUnit": "SECONDS",
+		"logActivity": false,
+		"port": 0,
+		"receiveBufferSize": -1,
+		"reconnectAttempts": 0,
+		"reconnectInterval": 1000,
+		"reuseAddress": true,
+		"reusePort": false,
+		"sendBufferSize": -1,
+		"soLinger": -1,
+		"ssl": false,
+		"sslHandshakeTimeout": 5,
+		"sslHandshakeTimeoutUnit": "SECONDS",
+		"tcpCork": false,
+		"tcpFastOpen": false,
+		"tcpKeepAlive": false,
+		"tcpNoDelay": true,
+		"tcpQuickAck": false,
+		"trafficClass": -1,
+		"trustAll": true,
+		"useAlpn": false
+	},
+	"fileSystemOptions": {
+		"classPathResolvingEnabled": true,
+		"fileCachingEnabled": true
+	},
+	"micrometerMetricsOptions": {
+		"registryName": "default",
+		"disabledMetricsCategories": [],
+		"enabled": true,
+		"jvmMetricsEnabled": true,
+		"labels": [
+			"HTTP_ROUTE",
+			"HTTP_METHOD",
+			"HTTP_CODE",
+			"EB_SIDE",
+			"POOL_TYPE"
+		],
+		"jmxMetricsOptions": {
+			"enabled": true,
+			"step": 5,
+			"domain": "vertx.jmx.domain"
+		}
+	}
+}

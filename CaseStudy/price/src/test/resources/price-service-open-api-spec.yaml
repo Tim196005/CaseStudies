@@ -1,0 +1,81 @@
+openapi: "3.0.0"
+info:
+  title: Case Study Flights Service
+  version: 1.0.0
+paths:
+  /flight:
+    get:
+      operationId: getFlights
+      summary: List Flights
+      parameters:
+      - name: origin
+        in: query
+        description: The flight origin
+        required: true
+        schema:
+          type: string
+      - name: destination
+        in: query
+        description: The flight destination
+        required: true
+        schema:
+          type: string
+      - name: date
+        in: query
+        description: Departure date
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: |-
+            200 OK
+          content:
+            application/json:
+              examples:
+                flights:
+                  value:
+                    {
+                      "flights":
+                        [
+                          {
+                            "flightNumber": "EX001",
+                            "origin": "DXB",
+                            "destination": "LHR",
+                            "date": "2023-01-21T07:15:21Z",
+                          },
+                          {
+                            "flightNumber": "EX002",
+                            "origin": "DXB",
+                            "destination": "LHR",
+                            "date": "2023-01-21T09:20:21Z",
+                          },
+                        ],
+                    }
+        "204":
+          description: |-
+            No Data Found
+          content:
+            application/json:
+              examples:
+                flights:
+                  value: |
+                    []
+        "400":
+          description: |-
+            Bad Request Missing parameter params in QUERY
+          content:
+            application/json:
+              examples:
+                flights:
+                  value: |
+                    []
+        "500":
+          description: |-
+            Internal Server Error
+          content:
+            application/json:
+              examples:
+                flights:
+                  value: |
+                    []

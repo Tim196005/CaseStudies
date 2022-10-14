@@ -1,0 +1,66 @@
+openapi: "3.0.0"
+info:
+  title: Case Study Flights Service
+  version: 1.0.0
+paths:
+  /price:
+    get:
+      operationId: getPrice
+      summary: Get a Price
+      parameters:
+      - name: flight
+        in: query
+        description: The flight number
+        required: true
+        schema:
+          type: string
+      - name: date
+        in: query
+        description: The date of the flight
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: |-
+            200 OK
+          content:
+            application/json:
+              examples:
+                flights:
+                  value:
+                    {
+                      "price":
+                          {
+                            "flightNumber": "EX001",
+                            "currency": "AED",
+                            "price": "3945.00"
+                          }
+                    }
+        "204":
+          description: |-
+            No Data Found
+          content:
+            application/json:
+              examples:
+                flights:
+                  value: |
+                    []
+        "400":
+          description: |-
+            Bad Request Missing parameter in QUERY
+          content:
+            application/json:
+              examples:
+                flights:
+                  value: |
+                    []
+        "500":
+          description: |-
+            Internal Server Error
+          content:
+            application/json:
+              examples:
+                flights:
+                  value: |
+                    []

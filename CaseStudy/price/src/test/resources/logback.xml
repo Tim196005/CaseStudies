@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+	<property name="LOG_HOME" value="./logs" />
+	<property name="APPLICATION_LOG_NAME" value="price-service" />
+	<property name="ACCESS_LOG_NAME" value="price-service-access" />
+	<property name="REQUEST_LOG_NAME" value="price-service-splunk" />
+
+	<appender name="CONSOLE"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %replace(%msg){'[\r\n]', ''}%n</pattern>
+		</layout>
+	</appender>
+
+	<appender name="ACCESS_LOG"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/${ACCESS_LOG_NAME}.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/${ACCESS_LOG_NAME}-%d{yyyy-MM-dd}.%i.gz
+			</fileNamePattern>
+			<maxFileSize>32MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>5GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %replace(%msg){'[\r\n]', ''}%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="APPLICATION"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/${APPLICATION_LOG_NAME}.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/${APPLICATION_LOG_NAME}-%d{yyyy-MM-dd}.%i.gz
+			</fileNamePattern>
+			<maxFileSize>32MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>5GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %replace(%msg){'[\r\n]', ''}%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- request log output -->
+	<appender name="REQUEST_LOG"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/${REQUEST_LOG_NAME}.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/${REQUEST_LOG_NAME}.%d{yyyy-MM-dd}.%i.gz
+			</fileNamePattern>
+			<maxFileSize>32MB</maxFileSize>
+			<maxHistory>30</maxHistory>
+			<totalSizeCap>5GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Async request logger -->
+	<appender name="REQUEST_LOG_ASYNC"
+		class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="REQUEST_LOG" />
+		<discardingThreshold>0</discardingThreshold>
+		<queueSize>1024</queueSize>
+		<neverBlock>true</neverBlock>
+	</appender>
+
+	<!-- logger for JSON request log -->
+	<logger level="INFO"
+		name="com.emirates.titanium.edge.verticles.LoggingVerticle"
+		additivity="false">
+		<appender-ref ref="REQUEST_LOG_ASYNC" />
+	</logger>
+	<!-- access log -->
+	<logger name="io.vertx.ext.web.handler.impl.LoggerHandlerImpl">
+		<appender-ref ref="ACCESS_LOG" />
+		<level value="DEBUG" />
+	</logger>
+	<!-- Other application loggers -->
+	<logger name="com.emirates.titanium">
+		<appender-ref ref="APPLICATION" />
+		<level value="DEBUG" />
+	</logger>
+	<logger name="com.springframework">
+		<appender-ref ref="APPLICATION" />
+		<level value="ERROR" />
+	</logger>
+	<logger name="com.springframework.boot">
+		<appender-ref ref="APPLICATION" />
+		<level value="ERROR" />
+	</logger>
+	<logger name="io.vertx">
+		<appender-ref ref="APPLICATION" />
+		<level value="DEBUG" />
+	</logger>
+	<logger name="io.netty">
+		<appender-ref ref="APPLICATION" />
+		<level value="ERROR" />
+	</logger>
+	<logger name="org.apache.ignite.spi.communication.tcp">
+		<appender-ref ref="APPLICATION" />
+		<level value="INFO" />
+	</logger>
+	<logger name="org.apache.ignite.internal.processors">
+		<appender-ref ref="APPLICATION" />
+		<level value="INFO" />
+	</logger>
+	<logger name="org.apache.ignite">
+		<appender-ref ref="APPLICATION" />
+		<level value="DEBUG" />
+	</logger>
+
+	<root level="DEBUG">
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</configuration>
