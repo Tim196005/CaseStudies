@@ -10,8 +10,3 @@ It is currently ranked **11th** in a list of **142** frameworks (Spring WebFlux 
 [1]: https://vertx.io "Title"
 [2]: https://www.techempower.com/benchmarks/#section=data-r21&test=composite "Title"
 
-## Projects
-
-**/flight** service, a reactive implementation of the first case study
-
-**/price** service, a reactive service returning mocked prices from a 3Gb cache of prices
