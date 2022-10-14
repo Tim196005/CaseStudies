@@ -21,7 +21,7 @@ import io.vertx.rxjava3.core.http.HttpServer;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @ExtendWith(VertxExtension.class)
-public class TestFlowablesVerticle {
+public class TestFlowable {
 
 	String classPath;
 

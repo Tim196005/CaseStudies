@@ -16,7 +16,7 @@ import io.casestudy.price.pricingrules.PricingService;
 import io.casestudy.price.pricingrules.PricingServiceImpl;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class TestPricingService {
+public class PricingServiceTest {
 
 	PricingService service;
 

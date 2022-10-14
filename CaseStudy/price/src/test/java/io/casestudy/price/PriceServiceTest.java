@@ -20,7 +20,7 @@ import io.vertx.rxjava3.core.http.HttpServerResponse;
 import io.vertx.rxjava3.ext.web.RoutingContext;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class TestPriceService {
+public class PriceServiceTest {
 
 	PriceService service;
 
