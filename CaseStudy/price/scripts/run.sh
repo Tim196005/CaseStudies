@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export JAVA_OPTS="-Xms512m -Xmx512m -XX:+UseG1GC -Djava.net.preferIPv4Stack=true -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8078"
+export JAVA_OPTS="-Xms512m -Xmx4096m -XX:+UseG1GC -Djava.net.preferIPv4Stack=true -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8078"
 
 export BASE_DIR="$(pwd)/"
 export JAVA_CONFIG_DIR="${BASE_DIR}/resources/"

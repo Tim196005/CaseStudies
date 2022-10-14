@@ -1,4 +1,4 @@
-# Case Study Flight Service
+# Case Study Price Service
 
 ## Tech Choices
 
