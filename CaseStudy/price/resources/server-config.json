@@ -1,11 +1,15 @@
 {
+	"mock": {
+		"years": 1,
+		"buffer-size": 1024
+	},
 	"cache": {
 		"priceCache": {
 		  "cache-name": "price.cache",
-		  "initial-capacity": 2024,
-		  "max-capacity": 32000,
+		  "initial-capacity": 365268,
+		  "max-capacity": 730536,
 		  "expiry-timeunit": "DAYS",
-		  "expiry-interval": 365
+		  "expiry-interval": 1
 		}
 	},
 	"serverOptions": {

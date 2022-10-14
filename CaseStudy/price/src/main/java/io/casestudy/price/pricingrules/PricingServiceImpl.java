@@ -23,13 +23,19 @@ public class PricingServiceImpl implements PricingService {
 
 	private final DateTimeFormatter formatter;
 
-	private AtomicInteger cacheLength;
+	private final AtomicInteger cacheLength;
+	
+	private final int years; 
+	
+	private final int bufferSize;
 
-	public PricingServiceImpl(PriceCacheService priceCacheService) {
+	public PricingServiceImpl(PriceCacheService priceCacheService, int years, int bufferSize) {
 		this.priceCacheService = priceCacheService;
 		this.rand = new Random();
 		this.formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		this.cacheLength = new AtomicInteger();
+		this.years = years;
+		this.bufferSize = bufferSize;
 	}
 
 	/*
@@ -37,15 +43,14 @@ public class PricingServiceImpl implements PricingService {
 	 */
 	@Override
 	public void warmupCache() {
-		Collection<LocalDate> dateRange = dateRange(LocalDate.now(), LocalDate.now().plusYears(2)).get();
+		Collection<LocalDate> dateRange = dateRange(LocalDate.now(), LocalDate.now().plusYears(years)).get();
 		log.info("Warmup pricing cache for {} days", dateRange.size());
 		IntStream.range(1, 500).forEach(i -> {
 			dateRange.forEach(date -> {
 				int factor = range(1000, 10000);
 				String flight = "EK".concat(String.format("%04d", i));
-				log.info("Flight {}", flight);
 				Price price = createPrice(flight, formatter.format(date), price(factor),
-						new byte[8192]);
+						new byte[bufferSize]);
 				priceCacheService.put().apply(price.cacheKey(), price);
 				cacheLength.getAndIncrement();
 			});

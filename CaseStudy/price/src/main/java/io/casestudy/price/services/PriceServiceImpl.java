@@ -24,7 +24,8 @@ public class PriceServiceImpl implements PriceService {
 			log.info("Price FLIGHT[{}], DATE[{}]", routingContext.queryParams().get("flight"),
 					routingContext.queryParams().get("date"));
 
-			String key = routingContext.queryParams().get("flight").concat(routingContext.queryParams().get("date"));
+			String key = routingContext.queryParams().get("flight").concat("|")
+					.concat(routingContext.queryParams().get("date"));
 
 			Price price = priceCacheService.get().apply(key);
 

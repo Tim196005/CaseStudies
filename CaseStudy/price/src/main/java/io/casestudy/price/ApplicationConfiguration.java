@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.event.EventListener;
 
+import io.casestudy.price.cache.CacheConstants;
 import io.casestudy.price.cache.PriceCacheService;
 import io.casestudy.price.exceptions.GeneralServiceException;
 import io.casestudy.price.pricingrules.PricingService;
@@ -159,8 +160,11 @@ public class ApplicationConfiguration {
 	 * The Pricing service, mocks the sources of Prices by Flight and Date
 	 */
 	@Bean
-	public PricingService pricingService(PriceCacheService priceCacheService) {
-		PricingService service = new PricingServiceImpl(priceCacheService);
+	public PricingService pricingService(ConfigRetriever configRetriever, PriceCacheService priceCacheService) {
+		JsonObject mockSizing = (JsonObject) CacheConstants.MOCK_SIZES_POINTER.queryJson(configRetriever.getCachedConfig());
+		int years = mockSizing.getInteger("years");
+		int bufferSize = mockSizing.getInteger("buffer-size");
+		PricingService service = new PricingServiceImpl(priceCacheService, years, bufferSize);
 		service.warmupCache();
 		return service;
 	}

@@ -18,4 +18,6 @@ public class CacheConstants {
 	
 	public static final JsonPointer PRICE_CACHE_POINTER = JsonPointer.from("/cache/priceCache");
 	
+	public static final JsonPointer MOCK_SIZES_POINTER = JsonPointer.from("/mock");
+	
 }

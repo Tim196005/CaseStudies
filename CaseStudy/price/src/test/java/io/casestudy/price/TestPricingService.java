@@ -34,7 +34,7 @@ public class TestPricingService {
 
 		price = new Price("EK0001", "2022-10-13", 1000.00, new byte[1024]);
 
-		service = new PricingServiceImpl(cacheService);
+		service = new PricingServiceImpl(cacheService, 1, 1024);
 	}
 
 	/*
@@ -47,6 +47,6 @@ public class TestPricingService {
 
 		service.warmupCache();
 
-		Mockito.verify(put, Mockito.atLeast(365267));
+		Mockito.verify(put, Mockito.atLeast(182633));
 	}
 }
