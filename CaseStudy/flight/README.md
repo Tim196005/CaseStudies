@@ -46,7 +46,6 @@ The "orchestrated" **Iterable Flowable** completes on completion of the "slowest
 - **Core Stack**, Spring Boot / Spring Framework
 - **Reactive Framework**, Vert.x and RxJava3
 - **API**, OpenAPI Spec (vertx-web-api-contract)
-- **In Memory Cache**, Caffiene
 - **Others**, Lombok, Slf4j, Logback
 - **Testing**, Junit5, Mockito, RestAssured
 - **Build Tool**, Maven

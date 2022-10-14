@@ -159,9 +159,10 @@ public class ApplicationConfiguration {
 	 * The Pricing service, mocks the sources of Prices by Flight and Date
 	 */
 	@Bean
-	@DependsOn("pricingService")
 	public PricingService pricingService(PriceCacheService priceCacheService) {
-		return new PricingServiceImpl(priceCacheService);
+		PricingService service = new PricingServiceImpl(priceCacheService);
+		service.warmupCache();
+		return service;
 	}
 
 	@Bean
@@ -283,5 +284,4 @@ public class ApplicationConfiguration {
 					routingContext.failure().getMessage()), routingContext.failure());
 		});
 	}
-
 }

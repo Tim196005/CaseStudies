@@ -42,7 +42,9 @@ public class PricingServiceImpl implements PricingService {
 		IntStream.range(1, 500).forEach(i -> {
 			dateRange.forEach(date -> {
 				int factor = range(1000, 10000);
-				Price price = createPrice("EK".concat(String.format("%03d", i)), formatter.format(date), price(factor),
+				String flight = "EK".concat(String.format("%04d", i));
+				log.info("Flight {}", flight);
+				Price price = createPrice(flight, formatter.format(date), price(factor),
 						new byte[8192]);
 				priceCacheService.put().apply(price.cacheKey(), price);
 				cacheLength.getAndIncrement();
