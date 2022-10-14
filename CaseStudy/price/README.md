@@ -19,7 +19,7 @@ Price for Flight and Date is returned by the PriceService, by fetching a value f
 
 Too configure the total amount to data created, the following JSON configuration can be amended
 
-**resources/server-conif.json**
+**resources/server-config.json**
 
 '"mock": {
 		"years": 1,
