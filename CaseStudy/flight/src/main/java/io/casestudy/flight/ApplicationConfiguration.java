@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.HttpStatus;
 
 import io.casestudy.flight.downstream.DownstreamService;
 import io.casestudy.flight.downstream.SlowService1;
@@ -42,10 +43,7 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.healthchecks.Status;
 import io.vertx.ext.web.openapi.RouterBuilderOptions;
-import io.vertx.ext.web.validation.BadRequestException;
-import io.vertx.ext.web.validation.BodyProcessorException;
 import io.vertx.ext.web.validation.ParameterProcessorException;
-import io.vertx.ext.web.validation.RequestPredicateException;
 import io.vertx.rxjava3.config.ConfigRetriever;
 import io.vertx.rxjava3.core.AbstractVerticle;
 import io.vertx.rxjava3.core.Vertx;
@@ -54,7 +52,6 @@ import io.vertx.rxjava3.core.http.HttpServer;
 import io.vertx.rxjava3.ext.healthchecks.HealthCheckHandler;
 import io.vertx.rxjava3.ext.healthchecks.HealthChecks;
 import io.vertx.rxjava3.ext.web.Router;
-import io.vertx.rxjava3.ext.web.openapi.Operation;
 import io.vertx.rxjava3.ext.web.openapi.RouterBuilder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -166,32 +163,34 @@ public class ApplicationConfiguration {
 
 	@Bean
 	@Autowired
-	public HttpServer httpServer(Vertx vertx, HttpServerOptions httpServerOptions, RouterBuilder routerBuilder,
-			@Qualifier("flightHandler") Operation flightHandler, HealthChecks healthChecks) {
+	public HttpServer httpServer(Vertx vertx, HttpServerOptions httpServerOptions, HealthChecks healthChecks,
+			FlightService flightService) {
+
+		RouterBuilderOptions options = new RouterBuilderOptions().setOperationModelKey("operationModel")
+				.setContractEndpoint("/contract").setMountNotImplementedHandler(true);
+
+		RouterBuilder routerBuilder = RouterBuilder
+				.rxCreate(vertx, System.getProperty(ApplicationConstants.API_CONFIG_DIR)).doOnError(t -> {
+					throw new GeneralServiceException("Unable to initialise Flight service", t);
+
+				}).timeout(1000, TimeUnit.MILLISECONDS).blockingGet().setOptions(options);
+
+		routerBuilder.operation("getFlights").handler(routingContext -> {
+			flightService.flights().accept(routingContext);
+
+		}).failureHandler(routingContext -> {
+			log.error("Flight service failed", routingContext.failure());
+			routingContext.response().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value()).end();
+
+		});
 
 		Router router = routerBuilder.createRouter().errorHandler(400, routingContext -> {
-			if (!Objects.isNull(routingContext.failure())) {
-				log.error("Router failed with bad request {}", routingContext.failure().getMessage(),
-						routingContext.failure());
-			}
-		}).errorHandler(500, routingContext -> {
-			if (!Objects.isNull(routingContext.failure())) {
-				if (routingContext.failure() instanceof BadRequestException
-						|| routingContext.failure() instanceof ParameterProcessorException
-						|| routingContext.failure() instanceof BodyProcessorException
-						|| routingContext.failure() instanceof RequestPredicateException) {
-					log.error("Router failed with bad request {}", routingContext.failure().getMessage(),
-							routingContext.failure());
-				} else {
-					log.error("Router failed with internal server error {}", routingContext.failure().getMessage(),
-							routingContext.failure());
-				}
+			if (routingContext.failure() instanceof ParameterProcessorException) {
+				routingContext.response().setStatusMessage(routingContext.failure().getMessage()).end();
 			}
 		}).errorHandler(501, routingContext -> {
-			if (!Objects.isNull(routingContext.failure())) {
-				log.error("Router failed with {}", routingContext.failure().getMessage(), routingContext.failure());
-			}
-
+			log.error("501 {}",
+					routingContext.failure() == null ? "" : routingContext.failure().getClass().getSimpleName());
 		});
 
 		router.get("/health").handler(HealthCheckHandler.createWithHealthChecks(healthChecks));
@@ -230,39 +229,6 @@ public class ApplicationConfiguration {
 	public HealthChecks healthChecks(Vertx vertx) {
 		return HealthChecks.create(vertx).register("/flight", 5,
 				future -> future.complete(Status.OK(new JsonObject())));
-	}
-
-	/*
-	 * OpenAPI spec router, mounts an endpoint /contract to get the contract spec
-	 */
-	@Autowired
-	@Bean
-	public RouterBuilder routerBuilder(Vertx vertx) {
-
-		RouterBuilderOptions options = new RouterBuilderOptions().setOperationModelKey("operationModel")
-				.setContractEndpoint("/contract");
-
-		return RouterBuilder.rxCreate(vertx, System.getProperty(ApplicationConstants.API_CONFIG_DIR)).doOnError(t -> {
-			throw new GeneralServiceException("Unable to initialise Flight service", t);
-
-		}).timeout(1000, TimeUnit.MILLISECONDS).blockingGet().setOptions(options);
-	}
-
-	/*
-	 * Creates a route from the OpenAPI spec
-	 */
-	@Autowired
-	@Bean(name = "flightHandler")
-	public Operation flightHandler(RouterBuilder routerBuilder, FlightService flightService) {
-		return routerBuilder.operation("getFlights").handler(routingContext -> {
-			flightService.flights().accept(routingContext);
-
-		}).failureHandler(routingContext -> {
-			routingContext.request().response().setStatusCode(500).end();
-
-			throw new GeneralServiceException(String.format("%s failed %s", routingContext.request().absoluteURI(),
-					routingContext.failure().getMessage()), routingContext.failure());
-		});
 	}
 
 	@Bean
